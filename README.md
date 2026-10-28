@@ -61,12 +61,25 @@ npm run dev
 
 ## Vercel へのデプロイ
 
-1. Vercel で GitHub リポジトリをインポートします（Framework Preset: Next.js。ビルド設定は既定のままで構いません）
-2. **デモ公開用**: 環境変数を設定せずにデプロイすると、デモモードだけのサイトになります
-3. **本番運用**: Environment Variables に Supabase の 2 変数を設定します。デモも並べて公開したい場合は `NEXT_PUBLIC_ENABLE_DEMO=true` も設定します
-4. Supabase の Authentication > URL Configuration の Site URL に Vercel の URL を登録します
+1. Vercel で GitHub リポジトリをインポートします
+   - Root Directory: 空欄（リポジトリ直下）
+   - Framework Preset: Next.js（`vercel.json` で `"framework": "nextjs"` を指定済み）
+   - Build / Install / Output の各設定は既定のまま（Output Directory を上書きしない）
+2. Vercel は **Production Branch（通常は `main`）** のコードを本番として公開します。アプリのコードが `main` に入っていることを確認してください
+3. **デモ公開用**: 環境変数は不要です。未設定のままデプロイするとデモモードだけのサイトになります
+4. **本番運用**: Environment Variables に Supabase の 2 変数を設定します。デモも並べて公開したい場合は `NEXT_PUBLIC_ENABLE_DEMO=true` も設定します
+5. Supabase の Authentication > URL Configuration の Site URL に Vercel の URL を登録します
 
 `NEXT_PUBLIC_*` はビルド時に埋め込まれるため、値を変えたら再デプロイが必要です。
+
+### 404 NOT_FOUND が表示される場合
+
+| 原因 | 確認・対処 |
+| --- | --- |
+| Production Branch にアプリのコードがない | Vercel の Deployments で、デプロイされたブランチとコミットを確認する |
+| Framework Preset が「Other」 | `vercel.json` で上書きされる。Settings > Build and Deployment で Next.js になっているかも確認する |
+| Output Directory を上書きしている | Override を OFF にする（Next.js では指定不要） |
+| Root Directory が誤っている | 空欄にする（`package.json` はリポジトリ直下にある） |
 
 ## 開発コマンド
 

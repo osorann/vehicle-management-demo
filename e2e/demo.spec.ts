@@ -117,3 +117,11 @@ test("デモを終了するとログイン画面に戻る", async ({ page }) => 
   await page.goto("/dashboard");
   await expect(page).toHaveURL(/\/login/);
 });
+
+test("トップページ（/）はデモ中ならダッシュボードを表示する", async ({ page }) => {
+  await startDemo(page);
+  const response = await page.goto("/");
+  expect(response?.status()).toBe(200);
+  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page.getByRole("heading", { name: "ダッシュボード" })).toBeVisible();
+});
